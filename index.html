@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walrus Uploader - Testnet</title>
+    <style>
+        :root {
+            --primary: #2dd4bf;
+            --primary-hover: #14b8a6;
+            --bg-dark: #0f172a;
+            --surface: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --success: #22c55e;
+            --error: #ef4444;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--surface);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--text-secondary);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background-color: rgba(45, 212, 191, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .upload-area:hover .upload-icon {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .upload-text {
+            color: var(--text);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .upload-hint {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-info {
+            display: none;
+            background-color: rgba(15, 23, 42, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--primary);
+            word-break: break-all;
+        }
+
+        .file-size {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--bg-dark);
+            grid-column: span 2;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text);
+            color: var(--text);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: center;
+            min-height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .result-card {
+            display: none;
+            background-color: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--success);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            color: var(--success);
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .blob-id-container {
+            background-color: rgba(15, 23, 42, 0.6);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--primary);
+            word-break: break-all;
+            font-size: 0.9rem;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+        }
+
+        .walrus-info {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+            padding-top: 15px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(15, 23, 42, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--bg-dark);
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-primary {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Walrus Uploader</h1>
+            <div class="subtitle">Testnet Simulation</div>
+        </header>
+
+        <div class="upload-area" id="dropZone">
+            <div class="upload-icon">☁️</div>
+            <div class="upload-text">Arrastra tu archivo aquí</div>
+            <div class="upload-hint">o haz clic para seleccionar</div>
+            <div class="upload-hint" style="margin-top: 5px; font-size: 0.75rem;">Máximo 10 MB</div>
+            <input type="file" id="fileInput">
+        </div>
+
+        <div class="file-info" id="fileInfo">
+            <div class="file-details">
+                <span class="file-name" id="fileName">archivo.txt</span>
+                <span class="file-size" id="fileSize">1.2 KB</span>
+            </div>
+            <div style="color: var(--success);">✓</div>
+        </div>
+
+        <div class="error-msg" id="errorMsg">Error message placeholder</div>
+
+        <div class="actions">
+            <button id="btnSimulate" class="btn-primary" disabled>
+                <span class="spinner" id="spinner"></span>
+                <span id="btnText">Simular Subida</span>
+            </button>
+            <button id="btnClear" class="btn-secondary">Limpiar</button>
+            <button id="btnCopy" class="btn-secondary" disabled>Copiar ID</button>
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <div class="success-icon">✓</div>
+            <h3 style="color: var(--success); margin-bottom: 10px;">¡Subida Exitosa!</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 10px;">Tu archivo ha sido "subido" a la testnet.</p>
+            <div class="blob-id-container" id="blobIdDisplay">
+                Waiting for blob ID...
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Este es un Blob ID simulado.</p>
+        </div>
+
+        <div class="walrus-info">
+            <p>Para subidas reales, se va a usar la CLI de Walrus o el SDK oficial.</p>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const errorMsg = document.getElementById('errorMsg');
+        const btnSimulate = document.getElementById('btnSimulate');
+        const btnClear = document.getElementById('btnClear');
+        const btnCopy = document.getElementById('btnCopy');
+        const resultCard = document.getElementById('resultCard');
+        const blobIdDisplay = document.getElementById('blobIdDisplay');
+        const spinner = document.getElementById('spinner');
+        const btnText = document.getElementById('btnText');
+
+        let currentFile = null;
+        const MAX_SIZE_MB = 10;
+        const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+        // Event Listeners
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (fileInput.files.length) {
+                handleFile(fileInput.files[0]);
+            }
+        });
+
+        btnSimulate.addEventListener('click', simulateUpload);
+        btnClear.addEventListener('click', resetForm);
+        btnCopy.addEventListener('click', copyToClipboard);
+
+        // Functions
+        function handleFile(file) {
+            resetForm(false); // Reset UI but keep file input logic ready
+
+            if (file.size > MAX_SIZE_BYTES) {
+                showError(`El archivo excede el límite de ${MAX_SIZE_MB}MB.`);
+                return;
+            }
+
+            currentFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatSize(file.size);
+
+            fileInfo.style.display = 'flex';
+            btnSimulate.disabled = false;
+            hideError();
+        }
+
+        function formatSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.style.opacity = '1';
+            currentFile = null;
+            btnSimulate.disabled = true;
+            fileInfo.style.display = 'none';
+        }
+
+        function hideError() {
+            errorMsg.style.opacity = '0';
+        }
+
+        function resetForm(clearInput = true) {
+            if (clearInput) {
+                fileInput.value = '';
+                currentFile = null;
+            }
+            fileInfo.style.display = 'none';
+            resultCard.style.display = 'none';
+            btnSimulate.disabled = true;
+            btnCopy.disabled = true;
+            hideError();
+            resetButtonState();
+        }
+
+        function simulateUpload() {
+            if (!currentFile) return;
+
+            setLoading(true);
+
+            // Simulate network delay 1.5s - 3s
+            const delay = Math.floor(Math.random() * 1500) + 1500;
+
+            setTimeout(() => {
+                const fakeBlobId = generateFakeBlobId();
+                blobIdDisplay.textContent = fakeBlobId;
+                resultCard.style.display = 'block';
+                btnCopy.disabled = false;
+                setLoading(false);
+            }, delay);
+        }
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                spinner.style.display = 'inline-block';
+                btnText.textContent = 'Subiendo...';
+                btnSimulate.disabled = true;
+                dropZone.style.pointerEvents = 'none';
+            } else {
+                spinner.style.display = 'none';
+                btnText.textContent = 'Simular Subida';
+                // Keep disabled after success to prevent double upload of same file without reset? 
+                // Let's allow re-upload if they want, or maybe force reset. 
+                // Requirement says "Clean" button resets. Let's keep simulate disabled to indicate "Done".
+                btnSimulate.disabled = true;
+                dropZone.style.pointerEvents = 'auto';
+            }
+        }
+
+        function resetButtonState() {
+            spinner.style.display = 'none';
+            btnText.textContent = 'Simular Subida';
+        }
+
+        function generateFakeBlobId() {
+            // Walrus blob IDs are usually long base64url strings. 
+            // We'll simulate a 44-char string (approx 32 bytes base64).
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+            let result = '';
+            for (let i = 0; i < 44; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function copyToClipboard() {
+            const text = blobIdDisplay.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btnCopy.textContent;
+                btnCopy.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    btnCopy.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>
