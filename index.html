@@ -449,7 +449,7 @@
             }
         });
 
-        btnSimulate.addEventListener('click', simulateUpload);
+        btnSimulate.addEventListener('click', uploadFile);
         btnClear.addEventListener('click', resetForm);
         btnCopy.addEventListener('click', copyToClipboard);
         btnWallet.addEventListener('click', connectWallet);
@@ -457,25 +457,15 @@
         // Functions
         async function connectWallet() {
             if (walletAddress) {
-                // Already connected, maybe disconnect or show info?
-                // For now, let's just alert the full address
                 alert(`Conectado a: ${walletAddress}`);
                 return;
             }
 
-            // Check for Sui Wallet
-            // Standard wallet detection often uses window.suiWallet or standard-wallet-adapter
-            // Since we are in a simple HTML/JS env without build steps for adapters, 
-            // we'll try a basic detection or simulate it if not present for the user to see the UI state.
-
-            // NOTE: In a real production app, you'd use @mysten/dapp-kit
-
-            const hasSuiWallet = window.suiWallet || window.stashedWallet; // Simplified check
+            const hasSuiWallet = window.suiWallet || window.stashedWallet;
 
             if (hasSuiWallet) {
                 try {
                     const permissions = ['viewAccount'];
-                    // This is a generic call structure, specific wallets might vary slightly without the adapter
                     const result = await window.suiWallet.requestPermissions();
                     if (result) {
                         const accounts = await window.suiWallet.getAccounts();
@@ -488,7 +478,6 @@
                     alert("No se pudo conectar la billetera. Asegúrate de tener Sui Wallet instalada.");
                 }
             } else {
-                // Fallback for simulation/demo purposes if no wallet found (or in this agent env)
                 const confirmSim = confirm("No se detectó una billetera Sui instalada. ¿Quieres simular una conexión para ver la interfaz?");
                 if (confirmSim) {
                     setWalletConnected("0x7e8...a1b2");
@@ -500,14 +489,13 @@
 
         function setWalletConnected(address) {
             walletAddress = address;
-            // Truncate if long
             const displayAddr = address.length > 10 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
             walletText.textContent = displayAddr;
             btnWallet.classList.add('connected');
         }
 
         function handleFile(file) {
-            resetForm(false); // Reset UI but keep file input logic ready
+            resetForm(false);
 
             if (file.size > MAX_SIZE_BYTES) {
                 showError(`El archivo excede el límite de ${MAX_SIZE_MB}MB.`);
@@ -520,6 +508,7 @@
 
             fileInfo.style.display = 'flex';
             btnSimulate.disabled = false;
+            btnText.textContent = 'Subir Archivo'; // Changed from Simular Subida
             hideError();
         }
 
@@ -556,54 +545,74 @@
             resetButtonState();
         }
 
-        function simulateUpload() {
+        async function uploadFile() {
             if (!currentFile) return;
 
             setLoading(true);
 
-            // Simulate network delay 1.5s - 3s
-            const delay = Math.floor(Math.random() * 1500) + 1500;
+            const PUBLISHER_URL = 'https://publisher.walrus-testnet.walrus.space/v1/blobs';
 
-            setTimeout(() => {
-                const fakeBlobId = generateFakeBlobId();
-                blobIdDisplay.textContent = fakeBlobId;
+            try {
+                const response = await fetch(`${PUBLISHER_URL}?epochs=5`, {
+                    method: 'PUT',
+                    body: currentFile
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Upload success:', data);
+
+                let blobId;
+                if (data.newlyCreated) {
+                    blobId = data.newlyCreated.blobObject.blobId;
+                } else if (data.alreadyCertified) {
+                    blobId = data.alreadyCertified.blobId;
+                } else {
+                    throw new Error('Respuesta inesperada del servidor Walrus');
+                }
+
+                blobIdDisplay.textContent = blobId;
                 resultCard.style.display = 'block';
+
+                // Update success message to be more real
+                const successTitle = resultCard.querySelector('h3');
+                const successText = resultCard.querySelector('p');
+                const subText = resultCard.querySelectorAll('p')[1];
+
+                successTitle.textContent = '¡Subida Exitosa a Walrus!';
+                successText.textContent = 'Tu archivo ha sido almacenado en la red descentralizada.';
+                subText.innerHTML = `Ver en explorador: <a href="https://suiscan.xyz/testnet/object/${blobId}" target="_blank" style="color: var(--primary);">SuiScan ↗</a>`;
+
                 btnCopy.disabled = false;
+
+            } catch (error) {
+                console.error('Upload failed:', error);
+                showError('Error al subir el archivo: ' + error.message);
+            } finally {
                 setLoading(false);
-            }, delay);
+            }
         }
 
         function setLoading(isLoading) {
             if (isLoading) {
                 spinner.style.display = 'inline-block';
-                btnText.textContent = 'Subiendo...';
+                btnText.textContent = 'Subiendo a Walrus...';
                 btnSimulate.disabled = true;
                 dropZone.style.pointerEvents = 'none';
             } else {
                 spinner.style.display = 'none';
-                btnText.textContent = 'Simular Subida';
-                // Keep disabled after success to prevent double upload of same file without reset? 
-                // Let's allow re-upload if they want, or maybe force reset. 
-                // Requirement says "Clean" button resets. Let's keep simulate disabled to indicate "Done".
-                btnSimulate.disabled = true;
+                btnText.textContent = 'Subir Archivo';
+                btnSimulate.disabled = true; // Keep disabled until reset
                 dropZone.style.pointerEvents = 'auto';
             }
         }
 
         function resetButtonState() {
             spinner.style.display = 'none';
-            btnText.textContent = 'Simular Subida';
-        }
-
-        function generateFakeBlobId() {
-            // Walrus blob IDs are usually long base64url strings. 
-            // We'll simulate a 44-char string (approx 32 bytes base64).
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-            let result = '';
-            for (let i = 0; i < 44; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
+            btnText.textContent = 'Subir Archivo';
         }
 
         function copyToClipboard() {
