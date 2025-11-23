@@ -273,12 +273,86 @@
                 grid-column: span 1;
             }
         }
+
+        /* Wallet & Network Styles */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .network-badge {
+            background-color: rgba(45, 212, 191, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .network-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--primary);
+        }
+
+        .btn-wallet {
+            background-color: var(--surface);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-wallet:hover {
+            background-color: rgba(45, 212, 191, 0.1);
+        }
+
+        .btn-wallet.connected {
+            background-color: var(--primary);
+            color: var(--bg-dark);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 480px) {
+            .top-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
+        <div class="top-bar">
+            <div class="network-badge">
+                <div class="network-dot"></div>
+                Walrus Testnet
+            </div>
+            <button id="btnWallet" class="btn-wallet">
+                <span>🔌</span>
+                <span id="walletText">Conectar Billetera</span>
+            </button>
+        </div>
+
         <header>
             <h1>Walrus Uploader</h1>
             <div class="subtitle">Testnet Simulation</div>
@@ -341,10 +415,13 @@
         const blobIdDisplay = document.getElementById('blobIdDisplay');
         const spinner = document.getElementById('spinner');
         const btnText = document.getElementById('btnText');
+        const btnWallet = document.getElementById('btnWallet');
+        const walletText = document.getElementById('walletText');
 
         let currentFile = null;
         const MAX_SIZE_MB = 10;
         const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+        let walletAddress = null;
 
         // Event Listeners
         dropZone.addEventListener('click', () => fileInput.click());
@@ -375,8 +452,60 @@
         btnSimulate.addEventListener('click', simulateUpload);
         btnClear.addEventListener('click', resetForm);
         btnCopy.addEventListener('click', copyToClipboard);
+        btnWallet.addEventListener('click', connectWallet);
 
         // Functions
+        async function connectWallet() {
+            if (walletAddress) {
+                // Already connected, maybe disconnect or show info?
+                // For now, let's just alert the full address
+                alert(`Conectado a: ${walletAddress}`);
+                return;
+            }
+
+            // Check for Sui Wallet
+            // Standard wallet detection often uses window.suiWallet or standard-wallet-adapter
+            // Since we are in a simple HTML/JS env without build steps for adapters, 
+            // we'll try a basic detection or simulate it if not present for the user to see the UI state.
+
+            // NOTE: In a real production app, you'd use @mysten/dapp-kit
+
+            const hasSuiWallet = window.suiWallet || window.stashedWallet; // Simplified check
+
+            if (hasSuiWallet) {
+                try {
+                    const permissions = ['viewAccount'];
+                    // This is a generic call structure, specific wallets might vary slightly without the adapter
+                    const result = await window.suiWallet.requestPermissions();
+                    if (result) {
+                        const accounts = await window.suiWallet.getAccounts();
+                        if (accounts && accounts.length > 0) {
+                            setWalletConnected(accounts[0]);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Connection failed", e);
+                    alert("No se pudo conectar la billetera. Asegúrate de tener Sui Wallet instalada.");
+                }
+            } else {
+                // Fallback for simulation/demo purposes if no wallet found (or in this agent env)
+                const confirmSim = confirm("No se detectó una billetera Sui instalada. ¿Quieres simular una conexión para ver la interfaz?");
+                if (confirmSim) {
+                    setWalletConnected("0x7e8...a1b2");
+                } else {
+                    window.open("https://chrome.google.com/webstore/detail/sui-wallet/opcgpfmipidbgpenhmajoajpbnyfyjmg", "_blank");
+                }
+            }
+        }
+
+        function setWalletConnected(address) {
+            walletAddress = address;
+            // Truncate if long
+            const displayAddr = address.length > 10 ? `${address.slice(0, 6)}...${address.slice(-4)}` : address;
+            walletText.textContent = displayAddr;
+            btnWallet.classList.add('connected');
+        }
+
         function handleFile(file) {
             resetForm(false); // Reset UI but keep file input logic ready
 
