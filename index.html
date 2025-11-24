@@ -4,19 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Walrus Uploader - Testnet</title>
+    <title>Biblioteca Escolar - Walrus</title>
     <style>
         :root {
-            --primary: #2dd4bf;
-            --primary-hover: #14b8a6;
-            --bg-dark: #0f172a;
-            --surface: #1e293b;
-            --text: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --success: #22c55e;
+            /* Psychology: Light Blues for Calm, Focus, Trust */
+            --primary: #0ea5e9;
+            /* Sky Blue 500 */
+            --primary-hover: #0284c7;
+            /* Sky Blue 600 */
+            --bg-light: #f0f9ff;
+            /* Sky Blue 50 */
+            --bg-wall: #e0f2fe;
+            /* Sky Blue 100 */
+            --surface: #ffffff;
+            --text: #334155;
+            /* Slate 700 */
+            --text-secondary: #64748b;
+            /* Slate 500 */
+            --success: #10b981;
+            /* Emerald 500 */
             --error: #ef4444;
-            --border-radius: 12px;
-            --transition: all 0.3s ease;
+            /* Red 500 */
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -26,110 +38,655 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-dark);
+            font-family: 'Outfit', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
             color: var(--text);
             min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Views --- */
+        .view {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .view.active {
             display: flex;
+        }
+
+        /* --- Login View --- */
+        #loginView {
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+            flex-direction: column;
         }
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background-color: var(--surface);
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        header {
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 420px;
             text-align: center;
-            margin-bottom: 30px;
+            border: 1px solid rgba(14, 165, 233, 0.1);
+            backdrop-filter: blur(10px);
         }
 
-        h1 {
+        .login-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .login-title {
             color: var(--primary);
-            font-size: 2rem;
-            margin-bottom: 8px;
-            font-weight: 700;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
 
-        .subtitle {
+        .login-subtitle {
             color: var(--text-secondary);
-            font-size: 1rem;
+            margin-bottom: 35px;
+            font-size: 1.1rem;
         }
 
-        .upload-area {
-            border: 2px dashed var(--text-secondary);
-            border-radius: var(--border-radius);
-            padding: 40px 20px;
-            text-align: center;
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px;
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
-            margin-bottom: 20px;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(14, 165, 233, 0.2);
+        }
+
+        .btn-login:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        /* --- Classroom View (CSS Art) --- */
+        #classroomView {
+            background-color: var(--bg-wall);
             position: relative;
             overflow: hidden;
         }
 
-        .upload-area:hover,
-        .upload-area.dragover {
+        /* Wall & Floor */
+        .wall {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(to bottom, #e0f2fe, #bae6fd);
+            border-bottom: 10px solid #cbd5e1;
+            /* Baseboard */
+        }
+
+        .floor {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background:
+                repeating-linear-gradient(90deg,
+                    #e2e8f0 0px,
+                    #e2e8f0 2px,
+                    transparent 2px,
+                    transparent 40px),
+                linear-gradient(#f1f5f9, #e2e8f0);
+            perspective: 1000px;
+        }
+
+        /* Window */
+        .window {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 200px;
+            height: 250px;
+            background: #7dd3fc;
+            /* Sky outside */
+            border: 12px solid #fff;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .window::before {
+            /* Horizontal bar */
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: #fff;
+            transform: translateY(-50%);
+        }
+
+        .window::after {
+            /* Vertical bar */
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            width: 8px;
+            background: #fff;
+            transform: translateX(-50%);
+        }
+
+        .sun {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: #fcd34d;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #fcd34d;
+        }
+
+        .cloud {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            width: 60px;
+            height: 30px;
+            background: #fff;
+            border-radius: 20px;
+            opacity: 0.8;
+            animation: floatCloud 20s linear infinite;
+        }
+
+        @keyframes floatCloud {
+            from {
+                transform: translateX(-100px);
+            }
+
+            to {
+                transform: translateX(250px);
+            }
+        }
+
+        /* Blackboard */
+        .blackboard {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 250px;
+            background-color: #334155;
+            border: 12px solid #94a3b8;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f1f5f9;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .chalk-text {
+            opacity: 0.9;
+            font-size: 1.2rem;
+        }
+
+        /* Desk (CSS Art) */
+        .desk-container {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            z-index: 5;
+        }
+
+        .desk-top {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: #d97706;
+            /* Wood main */
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: perspective(1000px) rotateX(20deg);
+            border-bottom: 15px solid #b45309;
+            /* Edge */
+        }
+
+        .desk-leg {
+            position: absolute;
+            bottom: 0;
+            width: 40px;
+            height: 150px;
+            background: #b45309;
+        }
+
+        .leg-left {
+            left: 100px;
+        }
+
+        .leg-right {
+            right: 100px;
+        }
+
+        /* Interactive Items (CSS Art) */
+        .interactive-item {
+            position: absolute;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .interactive-item:hover {
+            transform: scale(1.1) translateY(-10px);
+            filter: drop-shadow(0 15px 25px rgba(14, 165, 233, 0.4));
+        }
+
+        /* CSS Scroll */
+        .scroll-container {
+            bottom: 180px;
+            left: 30%;
+            width: 140px;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+        }
+
+        .scroll-roll {
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to right, #d4a373, #faedcd, #d4a373);
+            border-radius: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .scroll-paper {
+            width: 90%;
+            height: 140px;
+            background: #fefae0;
+            margin-top: -10px;
+            margin-bottom: -10px;
+            position: relative;
+            z-index: 1;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        .scroll-text-icon {
+            opacity: 0.5;
+        }
+
+        /* CSS Notebook */
+        .notebook-container {
+            bottom: 160px;
+            right: 30%;
+            width: 110px;
+            height: 140px;
+            transform: rotate(-15deg);
+            background-color: #7f1d1d;
+            /* Dark Red Leather */
+            border-radius: 5px 15px 15px 5px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .notebook-container:hover {
+            transform: scale(1.1) translateY(-10px) rotate(-15deg);
+        }
+
+        .notebook-spine {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 15px;
+            height: 100%;
+            background: linear-gradient(to right, #450a0a, #7f1d1d);
+            border-radius: 5px 0 0 5px;
+        }
+
+        .notebook-cover {
+            position: absolute;
+            left: 15px;
+            top: 0;
+            width: calc(100% - 15px);
+            height: 100%;
+            background: #991b1b;
+            border-radius: 0 15px 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .notebook-label {
+            background: #fefce8;
+            padding: 5px 10px;
+            border: 1px solid #d4d4d4;
+            font-size: 0.6rem;
+            font-family: monospace;
+            transform: rotate(-5deg);
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* CSS Magnifying Glass */
+        .magnifying-glass-container {
+            bottom: 180px;
+            left: 50%;
+            /* Centered between scroll (30%) and notebook (right 30%) */
+            width: 140px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+            transform: rotate(45deg);
+            text-decoration: none;
+            /* Remove underline from link */
+        }
+
+        .magnifying-glass-container:hover {
+            transform: scale(1.1) translateY(-10px) rotate(45deg);
+            filter: drop-shadow(0 15px 25px rgba(14, 165, 233, 0.4));
+        }
+
+        .glass-lens {
+            width: 100px;
+            height: 100px;
+            border: 12px solid #334155;
+            /* Dark frame */
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            /* Glass effect */
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+            z-index: 2;
+        }
+
+        .glass-reflection {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+        }
+
+        .glass-handle {
+            width: 20px;
+            height: 80px;
+            background: #78350f;
+            /* Wood handle */
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 10px 10px;
+            z-index: 1;
+        }
+
+        /* User Badge */
+        .user-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 20;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 20;
+        }
+
+        .network-badge {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .network-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-wallet {
+            background-color: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-wallet:hover {
+            background-color: var(--bg-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-wallet.connected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* --- Modals (Light Theme) --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(51, 65, 85, 0.6);
+            /* Slate overlay */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--surface);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 550px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f1f5f9;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .close-modal:hover {
+            background-color: #e2e8f0;
+            color: var(--error);
+        }
+
+        .uploader-container {
+            padding: 40px;
+        }
+
+        .upload-area {
+            border: 3px dashed #cbd5e1;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 25px;
+            background-color: #f8fafc;
+        }
+
+        .upload-area:hover {
             border-color: var(--primary);
-            background-color: rgba(45, 212, 191, 0.05);
+            background-color: #f0f9ff;
+            transform: scale(1.01);
         }
 
         .upload-icon {
-            font-size: 48px;
-            color: var(--text-secondary);
+            font-size: 3rem;
             margin-bottom: 15px;
-            transition: var(--transition);
-        }
-
-        .upload-area:hover .upload-icon {
-            color: var(--primary);
-            transform: translateY(-5px);
+            display: block;
         }
 
         .upload-text {
             color: var(--text);
-            margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
         }
 
         .upload-hint {
             color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        #fileInput {
-            display: none;
+            font-size: 0.9rem;
         }
 
         .file-info {
             display: none;
-            background-color: rgba(15, 23, 42, 0.5);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background-color: #f1f5f9;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
             align-items: center;
             justify-content: space-between;
-        }
-
-        .file-details {
-            display: flex;
-            flex-direction: column;
+            border: 1px solid #e2e8f0;
         }
 
         .file-name {
             font-weight: 600;
-            color: var(--primary);
-            word-break: break-all;
+            color: var(--text);
         }
 
         .file-size {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
         }
 
@@ -140,200 +697,170 @@
             margin-bottom: 20px;
         }
 
-        button {
-            padding: 12px 20px;
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 14px;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--bg-dark);
-            grid-column: span 2;
+            gap: 10px;
+            width: 100%;
         }
 
         .btn-primary:hover {
             background-color: var(--primary-hover);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
         .btn-primary:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
         .btn-secondary {
-            background-color: transparent;
-            border: 1px solid var(--text-secondary);
+            background-color: white;
+            border: 2px solid #e2e8f0;
             color: var(--text-secondary);
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
         }
 
         .btn-secondary:hover {
-            border-color: var(--text);
+            border-color: var(--text-secondary);
             color: var(--text);
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .error-msg {
-            color: var(--error);
-            font-size: 0.9rem;
-            margin-top: 10px;
-            text-align: center;
-            min-height: 20px;
-            opacity: 0;
-            transition: opacity 0.3s;
+            background-color: #f8fafc;
         }
 
         .result-card {
             display: none;
-            background-color: rgba(34, 197, 94, 0.1);
-            border: 1px solid var(--success);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-top: 20px;
+            background-color: #ecfdf5;
+            /* Emerald 50 */
+            border: 1px solid #a7f3d0;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
             text-align: center;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .success-icon {
             color: var(--success);
-            font-size: 32px;
+            font-size: 2.5rem;
             margin-bottom: 10px;
+            display: block;
         }
 
         .blob-id-container {
-            background-color: rgba(15, 23, 42, 0.6);
-            padding: 10px;
-            border-radius: 6px;
+            background-color: white;
+            padding: 12px;
+            border-radius: 8px;
             margin: 15px 0;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Courier New', monospace;
             color: var(--primary);
             word-break: break-all;
+            border: 1px solid #e2e8f0;
             font-size: 0.9rem;
-            border: 1px solid rgba(45, 212, 191, 0.2);
         }
 
-        .walrus-info {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            border-top: 1px solid rgba(148, 163, 184, 0.2);
-            padding-top: 15px;
+        .review-content {
+            padding: 60px 40px;
             text-align: center;
         }
 
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(15, 23, 42, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--bg-dark);
-            animation: spin 1s ease-in-out infinite;
-            display: none;
+        .review-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: bounce 2s infinite;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
             }
         }
 
-        /* Mobile adjustments */
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Mobile */
         @media (max-width: 480px) {
-            .container {
-                padding: 25px;
+            .desk-container {
+                width: 100%;
+            }
+
+            .window {
+                width: 120px;
+                height: 160px;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 5%;
+            }
+
+            .blackboard {
+                width: 90%;
+                top: 35%;
+            }
+
+            .scroll-container {
+                left: 10%;
+                bottom: 180px;
+            }
+
+            .notebook-container {
+                right: 10%;
+                bottom: 160px;
             }
 
             .actions {
                 grid-template-columns: 1fr;
-            }
-
-            .btn-primary {
-                grid-column: span 1;
-            }
-        }
-
-        /* Wallet & Network Styles */
-        .top-bar {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 15px;
-        }
-
-        .network-badge {
-            background-color: rgba(45, 212, 191, 0.1);
-            color: var(--primary);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border: 1px solid rgba(45, 212, 191, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .network-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 5px var(--primary);
-        }
-
-        .btn-wallet {
-            background-color: var(--surface);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-wallet:hover {
-            background-color: rgba(45, 212, 191, 0.1);
-        }
-
-        .btn-wallet.connected {
-            background-color: var(--primary);
-            color: var(--bg-dark);
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 480px) {
-            .top-bar {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
             }
         }
     </style>
@@ -341,7 +868,64 @@
 
 <body>
 
-    <div class="container">
+    <!-- Login View -->
+    <div id="loginView" class="view active">
+        <div class="login-card">
+            <div class="login-icon">🎓</div>
+            <div class="login-title">Repositorio Máximo de Proyectos que Enorgullecen</div>
+            <div class="login-subtitle">Sistema de Evidencias Walrus</div>
+
+            <div class="form-group">
+                <label for="generationSelect">Generación Escolar</label>
+                <select id="generationSelect">
+                    <option value="" disabled selected>Selecciona tu año...</option>
+                    <option value="2025">Generación 2025</option>
+                    <option value="2024">Generación 2024</option>
+                    <option value="2023">Generación 2023</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="aliasInput">Alias de Alumno</label>
+                <input type="text" id="aliasInput" placeholder="Ej. CryptoStudent_01">
+            </div>
+
+            <button id="btnLogin" class="btn-login">Entrar al Salón</button>
+        </div>
+    </div>
+
+    <!-- Classroom View -->
+    <div id="classroomView" class="view">
+        <!-- CSS Art Background -->
+        <div class="wall"></div>
+        <div class="window">
+            <div class="sun"></div>
+            <div class="cloud"></div>
+        </div>
+        <div class="blackboard">
+            <div class="chalk-text">
+                "El conocimiento es poder.<br>Guárdalo para siempre."
+            </div>
+        </div>
+        <div class="floor"></div>
+
+        <!-- CSS Art Desk -->
+        <div class="desk-container">
+            <div class="desk-leg leg-left"></div>
+            <div class="desk-leg leg-right"></div>
+            <div class="desk-top"></div>
+        </div>
+
+        <!-- User Badge -->
+        <div class="user-badge">
+            <div class="user-avatar" id="userAvatar">A</div>
+            <div>
+                <div style="font-weight: 700; color: var(--text);" id="displayAlias">Alias</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary);" id="displayGen">Gen 2025</div>
+            </div>
+        </div>
+
+        <!-- Top Bar -->
         <div class="top-bar">
             <div class="network-badge">
                 <div class="network-dot"></div>
@@ -353,137 +937,193 @@
             </button>
         </div>
 
-        <header>
-            <h1>Walrus Uploader</h1>
-            <div class="subtitle">Testnet Simulation</div>
-        </header>
+        <!-- Interactive Items (CSS Art) -->
 
-        <div class="upload-area" id="dropZone">
-            <div class="upload-icon">☁️</div>
-            <div class="upload-text">Arrastra tu archivo aquí</div>
-            <div class="upload-hint">o haz clic para seleccionar</div>
-            <div class="upload-hint" style="margin-top: 5px; font-size: 0.75rem;">Máximo 10 MB</div>
-            <input type="file" id="fileInput">
-        </div>
-
-        <div class="file-info" id="fileInfo">
-            <div class="file-details">
-                <span class="file-name" id="fileName">archivo.txt</span>
-                <span class="file-size" id="fileSize">1.2 KB</span>
+        <!-- CSS Scroll (Upload) -->
+        <div id="scrollItem" class="interactive-item scroll-container" title="Subir Mejores Trabajos">
+            <div class="scroll-roll"></div>
+            <div class="scroll-paper">
+                <div class="scroll-text-icon">📜</div>
             </div>
-            <div style="color: var(--success);">✓</div>
+            <div class="scroll-roll"></div>
         </div>
 
-        <div class="error-msg" id="errorMsg">Error message placeholder</div>
-
-        <div class="actions">
-            <button id="btnSimulate" class="btn-primary" disabled>
-                <span class="spinner" id="spinner"></span>
-                <span id="btnText">Simular Subida</span>
-            </button>
-            <button id="btnClear" class="btn-secondary">Limpiar</button>
-            <button id="btnCopy" class="btn-secondary" disabled>Copiar ID</button>
-        </div>
-
-        <div class="result-card" id="resultCard">
-            <div class="success-icon">✓</div>
-            <h3 style="color: var(--success); margin-bottom: 10px;">¡Subida Exitosa!</h3>
-            <p style="font-size: 0.9rem; margin-bottom: 10px;">Tu archivo ha sido "subido" a la testnet.</p>
-            <div class="blob-id-container" id="blobIdDisplay">
-                Waiting for blob ID...
+        <!-- CSS Magnifying Glass (Explorer) -->
+        <a href="https://walruscan.com/testnet/blobs" target="_blank"
+            class="interactive-item magnifying-glass-container" title="Explorar Blobs en WalrusScan">
+            <div class="glass-lens">
+                <div class="glass-reflection"></div>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-secondary);">Este es un Blob ID simulado.</p>
+            <div class="glass-handle"></div>
+        </a>
+
+        <!-- CSS Notebook (Review) -->
+        <div id="notebookItem" class="interactive-item notebook-container" title="Ir a Revisar Documentos">
+            <div class="notebook-spine"></div>
+            <div class="notebook-cover">
+                <div class="notebook-label">NOTAS</div>
+            </div>
         </div>
 
-        <div class="walrus-info">
-            <p>Para subidas reales, se va a usar la CLI de Walrus o el SDK oficial.</p>
+    </div>
+
+    <!-- Uploader Modal -->
+    <div id="uploaderModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('uploaderModal')">×</button>
+            <div class="uploader-container">
+                <header style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 5px;">Subir Evidencia</h2>
+                    <div style="color: var(--text-secondary);">Sube tus mejores trabajos a la red Walrus</div>
+                </header>
+
+                <div class="upload-area" id="dropZone">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-text">Arrastra tu archivo aquí</div>
+                    <div class="upload-hint">o haz clic para seleccionar (Máx 10MB)</div>
+                    <input type="file" id="fileInput">
+                </div>
+
+                <div class="file-info" id="fileInfo">
+                    <div class="file-details">
+                        <span class="file-name" id="fileName">archivo.txt</span>
+                        <span class="file-size" id="fileSize">0 KB</span>
+                    </div>
+                    <div style="color: var(--success); font-weight: bold;">Listo</div>
+                </div>
+
+                <div class="error-msg" id="errorMsg"
+                    style="color: var(--error); text-align: center; margin-bottom: 15px; display: none;"></div>
+
+                <div class="actions">
+                    <button id="btnSimulate" class="btn-primary" disabled>
+                        <span class="spinner" id="spinner"></span>
+                        <span id="btnText">Subir Archivo</span>
+                    </button>
+                    <button id="btnClear" class="btn-secondary">Limpiar</button>
+                </div>
+
+                <div style="text-align: center; margin-top: 10px;">
+                    <button id="btnCopy" class="btn-secondary" disabled
+                        style="width: auto; display: inline-block; padding: 8px 16px; font-size: 0.9rem;">Copiar
+                        ID</button>
+                </div>
+
+                <div class="result-card" id="resultCard">
+                    <div class="success-icon">🎉</div>
+                    <h3 style="color: var(--text); margin-bottom: 10px;">¡Subida Exitosa!</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Tu trabajo ha sido preservado.</p>
+                    <div class="blob-id-container" id="blobIdDisplay">...</div>
+                    <p style="font-size: 0.9rem; margin-top: 15px;">
+                        <a href="#" target="_blank"
+                            style="color: var(--primary); text-decoration: none; font-weight: 600;">Ver en SuiScan ↗</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('reviewModal')">×</button>
+            <div class="review-content">
+                <div class="review-icon">📚</div>
+                <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 1.8rem;">Revisión de Documentos</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 35px; line-height: 1.6;">
+                    Accede al explorador oficial para ver todas las evidencias y trabajos registrados en la red Walrus
+                    Testnet.
+                </p>
+                <a href="https://suiscan.xyz/testnet/home" target="_blank" class="btn-primary"
+                    style="text-decoration: none; display: inline-flex; width: auto; padding: 16px 32px;">
+                    Ir a SuiScan ↗
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Elements
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileName = document.getElementById('fileName');
-        const fileSize = document.getElementById('fileSize');
-        const errorMsg = document.getElementById('errorMsg');
-        const btnSimulate = document.getElementById('btnSimulate');
-        const btnClear = document.getElementById('btnClear');
-        const btnCopy = document.getElementById('btnCopy');
-        const resultCard = document.getElementById('resultCard');
-        const blobIdDisplay = document.getElementById('blobIdDisplay');
-        const spinner = document.getElementById('spinner');
-        const btnText = document.getElementById('btnText');
+        // --- State & Navigation ---
+        const loginView = document.getElementById('loginView');
+        const classroomView = document.getElementById('classroomView');
+        const uploaderModal = document.getElementById('uploaderModal');
+        const reviewModal = document.getElementById('reviewModal');
+
+        // Login Logic
+        const btnLogin = document.getElementById('btnLogin');
+        const generationSelect = document.getElementById('generationSelect');
+        const aliasInput = document.getElementById('aliasInput');
+        const displayAlias = document.getElementById('displayAlias');
+        const displayGen = document.getElementById('displayGen');
+        const userAvatar = document.getElementById('userAvatar');
+
+        btnLogin.addEventListener('click', () => {
+            const gen = generationSelect.value;
+            const alias = aliasInput.value.trim();
+
+            if (!gen || !alias) {
+                alert('Por favor selecciona una generación e ingresa tu alias.');
+                return;
+            }
+
+            // Set User Info
+            displayAlias.textContent = alias;
+            displayGen.textContent = `Gen ${gen}`;
+            userAvatar.textContent = alias.charAt(0).toUpperCase();
+
+            // Transition
+            loginView.classList.remove('active');
+            setTimeout(() => loginView.style.display = 'none', 500); // Wait for transition
+            classroomView.classList.add('active');
+        });
+
+        // Modal Logic
+        document.getElementById('scrollItem').addEventListener('click', () => {
+            uploaderModal.classList.add('active');
+        });
+
+        document.getElementById('notebookItem').addEventListener('click', () => {
+            reviewModal.classList.add('active');
+        });
+
+        window.closeModal = function (modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close on click outside
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // --- Wallet Logic (Existing) ---
         const btnWallet = document.getElementById('btnWallet');
         const walletText = document.getElementById('walletText');
-
-        let currentFile = null;
-        const MAX_SIZE_MB = 10;
-        const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
         let walletAddress = null;
 
-        // Event Listeners
-        dropZone.addEventListener('click', () => fileInput.click());
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('dragover');
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length) {
-                handleFile(e.dataTransfer.files[0]);
-            }
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (fileInput.files.length) {
-                handleFile(fileInput.files[0]);
-            }
-        });
-
-        btnSimulate.addEventListener('click', uploadFile);
-        btnClear.addEventListener('click', resetForm);
-        btnCopy.addEventListener('click', copyToClipboard);
         btnWallet.addEventListener('click', connectWallet);
 
-        // Functions
         async function connectWallet() {
             if (walletAddress) {
                 alert(`Conectado a: ${walletAddress}`);
                 return;
             }
-
             const hasSuiWallet = window.suiWallet || window.stashedWallet;
-
             if (hasSuiWallet) {
                 try {
-                    const permissions = ['viewAccount'];
                     const result = await window.suiWallet.requestPermissions();
                     if (result) {
                         const accounts = await window.suiWallet.getAccounts();
-                        if (accounts && accounts.length > 0) {
-                            setWalletConnected(accounts[0]);
-                        }
+                        if (accounts && accounts.length > 0) setWalletConnected(accounts[0]);
                     }
                 } catch (e) {
                     console.error("Connection failed", e);
-                    alert("No se pudo conectar la billetera. Asegúrate de tener Sui Wallet instalada.");
+                    alert("No se pudo conectar la billetera.");
                 }
             } else {
-                const confirmSim = confirm("No se detectó una billetera Sui instalada. ¿Quieres simular una conexión para ver la interfaz?");
-                if (confirmSim) {
-                    setWalletConnected("0x7e8...a1b2");
-                } else {
-                    window.open("https://chrome.google.com/webstore/detail/sui-wallet/opcgpfmipidbgpenhmajoajpbnyfyjmg", "_blank");
-                }
+                const confirmSim = confirm("No se detectó billetera. ¿Simular conexión?");
+                if (confirmSim) setWalletConnected("0x7e8...a1b2");
             }
         }
 
@@ -494,21 +1134,51 @@
             btnWallet.classList.add('connected');
         }
 
+        // --- Uploader Logic (Existing) ---
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const errorMsg = document.getElementById('errorMsg');
+        const btnSimulate = document.getElementById('btnSimulate'); // Now "Subir Archivo"
+        const btnClear = document.getElementById('btnClear');
+        const btnCopy = document.getElementById('btnCopy');
+        const resultCard = document.getElementById('resultCard');
+        const blobIdDisplay = document.getElementById('blobIdDisplay');
+        const spinner = document.getElementById('spinner');
+        const btnText = document.getElementById('btnText');
+
+        let currentFile = null;
+        const MAX_SIZE_MB = 10;
+        const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--primary)'; dropZone.style.backgroundColor = '#f0f9ff'; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = '#cbd5e1'; dropZone.style.backgroundColor = '#f8fafc'; });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#cbd5e1';
+            dropZone.style.backgroundColor = '#f8fafc';
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', () => { if (fileInput.files.length) handleFile(fileInput.files[0]); });
+
+        btnSimulate.addEventListener('click', uploadFile);
+        btnClear.addEventListener('click', resetForm);
+        btnCopy.addEventListener('click', copyToClipboard);
+
         function handleFile(file) {
             resetForm(false);
-
             if (file.size > MAX_SIZE_BYTES) {
-                showError(`El archivo excede el límite de ${MAX_SIZE_MB}MB.`);
+                showError(`Excede ${MAX_SIZE_MB}MB.`);
                 return;
             }
-
             currentFile = file;
             fileName.textContent = file.name;
             fileSize.textContent = formatSize(file.size);
-
             fileInfo.style.display = 'flex';
             btnSimulate.disabled = false;
-            btnText.textContent = 'Subir Archivo'; // Changed from Simular Subida
             hideError();
         }
 
@@ -522,75 +1192,51 @@
 
         function showError(msg) {
             errorMsg.textContent = msg;
-            errorMsg.style.opacity = '1';
+            errorMsg.style.display = 'block';
             currentFile = null;
             btnSimulate.disabled = true;
             fileInfo.style.display = 'none';
         }
 
-        function hideError() {
-            errorMsg.style.opacity = '0';
-        }
+        function hideError() { errorMsg.style.display = 'none'; }
 
         function resetForm(clearInput = true) {
-            if (clearInput) {
-                fileInput.value = '';
-                currentFile = null;
-            }
+            if (clearInput) { fileInput.value = ''; currentFile = null; }
             fileInfo.style.display = 'none';
             resultCard.style.display = 'none';
             btnSimulate.disabled = true;
             btnCopy.disabled = true;
             hideError();
-            resetButtonState();
+            spinner.style.display = 'none';
+            btnText.textContent = 'Subir Archivo';
         }
 
         async function uploadFile() {
             if (!currentFile) return;
-
             setLoading(true);
-
             const PUBLISHER_URL = 'https://publisher.walrus-testnet.walrus.space/v1/blobs';
 
             try {
-                const response = await fetch(`${PUBLISHER_URL}?epochs=5`, {
-                    method: 'PUT',
-                    body: currentFile
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
+                const response = await fetch(`${PUBLISHER_URL}?epochs=5`, { method: 'PUT', body: currentFile });
+                if (!response.ok) throw new Error(`Status: ${response.status}`);
                 const data = await response.json();
-                console.log('Upload success:', data);
 
                 let blobId;
-                if (data.newlyCreated) {
-                    blobId = data.newlyCreated.blobObject.blobId;
-                } else if (data.alreadyCertified) {
-                    blobId = data.alreadyCertified.blobId;
-                } else {
-                    throw new Error('Respuesta inesperada del servidor Walrus');
-                }
+                if (data.newlyCreated) blobId = data.newlyCreated.blobObject.blobId;
+                else if (data.alreadyCertified) blobId = data.alreadyCertified.blobId;
+                else throw new Error('Respuesta inesperada');
 
                 blobIdDisplay.textContent = blobId;
                 resultCard.style.display = 'block';
 
-                // Update success message to be more real
-                const successTitle = resultCard.querySelector('h3');
-                const successText = resultCard.querySelector('p');
-                const subText = resultCard.querySelectorAll('p')[1];
-
-                successTitle.textContent = '¡Subida Exitosa a Walrus!';
-                successText.textContent = 'Tu archivo ha sido almacenado en la red descentralizada.';
-                subText.innerHTML = `Ver en explorador: <a href="https://suiscan.xyz/testnet/object/${blobId}" target="_blank" style="color: var(--primary);">SuiScan ↗</a>`;
+                // Update link
+                const link = resultCard.querySelector('a');
+                link.href = `https://suiscan.xyz/testnet/object/${blobId}`;
 
                 btnCopy.disabled = false;
-
             } catch (error) {
-                console.error('Upload failed:', error);
-                showError('Error al subir el archivo: ' + error.message);
+                console.error(error);
+                showError('Error: ' + error.message);
             } finally {
                 setLoading(false);
             }
@@ -599,30 +1245,20 @@
         function setLoading(isLoading) {
             if (isLoading) {
                 spinner.style.display = 'inline-block';
-                btnText.textContent = 'Subiendo a Walrus...';
+                btnText.textContent = 'Subiendo...';
                 btnSimulate.disabled = true;
-                dropZone.style.pointerEvents = 'none';
             } else {
                 spinner.style.display = 'none';
                 btnText.textContent = 'Subir Archivo';
-                btnSimulate.disabled = true; // Keep disabled until reset
-                dropZone.style.pointerEvents = 'auto';
+                btnSimulate.disabled = true;
             }
         }
 
-        function resetButtonState() {
-            spinner.style.display = 'none';
-            btnText.textContent = 'Subir Archivo';
-        }
-
         function copyToClipboard() {
-            const text = blobIdDisplay.textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                const originalText = btnCopy.textContent;
+            navigator.clipboard.writeText(blobIdDisplay.textContent).then(() => {
+                const original = btnCopy.textContent;
                 btnCopy.textContent = '¡Copiado!';
-                setTimeout(() => {
-                    btnCopy.textContent = originalText;
-                }, 2000);
+                setTimeout(() => btnCopy.textContent = original, 2000);
             });
         }
     </script>
