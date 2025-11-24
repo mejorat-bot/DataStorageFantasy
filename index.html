@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca Escolar - Walrus</title>
+    <title>School Library - Walrus</title>
     <style>
         :root {
             /* Psychology: Light Blues for Calm, Focus, Trust */
@@ -490,301 +490,158 @@
             z-index: 1;
         }
 
-        /* User Badge */
-        .user-badge {
+        /* CSS Owl */
+        .owl-container {
+            bottom: 190px;
+            left: 68%;
+            /* Increased spacing from Magnifying Glass (50%) */
+            width: 90px;
+            height: 110px;
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: var(--shadow-soft);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 20;
-        }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 15px;
-            z-index: 20;
-        }
-
-        .network-badge {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            box-shadow: var(--shadow-soft);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .network-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--success);
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
-        }
-
-        .btn-wallet {
-            background-color: white;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            z-index: 15;
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
             transition: var(--transition);
-            box-shadow: var(--shadow-soft);
         }
 
-        .btn-wallet:hover {
-            background-color: var(--bg-light);
-            transform: translateY(-1px);
+        .owl-container:hover {
+            transform: scale(1.1) translateY(-10px);
         }
 
-        .btn-wallet.connected {
-            background-color: var(--primary);
-            color: white;
+        .owl-body {
+            width: 70px;
+            height: 80px;
+            background: #713f12;
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        /* --- Modals (Light Theme) --- */
-        .modal-overlay {
-            display: none;
-            position: fixed;
+        .owl-head {
+            width: 80px;
+            height: 45px;
+            background: #713f12;
+            border-radius: 40px 40px 20px 20px;
+            position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(51, 65, 85, 0.6);
-            /* Slate overlay */
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(4px);
-            animation: fadeIn 0.3s ease;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--surface);
-            border-radius: 24px;
-            width: 90%;
-            max-width: 550px;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden;
-        }
-
-        .close-modal {
+        .owl-ear {
+            width: 25px;
+            height: 25px;
+            background: #713f12;
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #f1f5f9;
-            border: none;
-            width: 32px;
-            height: 32px;
+            top: -5px;
+            z-index: 1;
+        }
+
+        .ear-left {
+            left: 0;
+            border-radius: 0 100% 0 0;
+            transform: rotate(-15deg);
+        }
+
+        .ear-right {
+            right: 0;
+            border-radius: 100% 0 0 0;
+            transform: rotate(15deg);
+        }
+
+        .owl-eye {
+            width: 28px;
+            height: 28px;
+            background: white;
             border-radius: 50%;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 10;
-            transition: var(--transition);
+            position: absolute;
+            top: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
+            border: 3px solid #451a03;
+            z-index: 3;
         }
 
-        .close-modal:hover {
-            background-color: #e2e8f0;
-            color: var(--error);
+        .eye-left {
+            left: 10px;
         }
 
-        .uploader-container {
-            padding: 40px;
+        .eye-right {
+            right: 10px;
         }
 
-        .upload-area {
-            border: 3px dashed #cbd5e1;
-            border-radius: 20px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 25px;
-            background-color: #f8fafc;
+        .owl-pupil {
+            width: 12px;
+            height: 12px;
+            background: #000;
+            border-radius: 50%;
         }
 
-        .upload-area:hover {
-            border-color: var(--primary);
-            background-color: #f0f9ff;
-            transform: scale(1.01);
+        .owl-beak {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #f59e0b;
+            position: absolute;
+            top: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
         }
 
-        .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            display: block;
+        .owl-wing {
+            width: 25px;
+            height: 55px;
+            background: #5c320e;
+            position: absolute;
+            top: 35px;
+            border-radius: 50% 20% 50% 20%;
+            z-index: 2;
         }
 
-        .upload-text {
-            color: var(--text);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+        .wing-left {
+            left: -10px;
+            transform: rotate(15deg);
         }
 
-        .upload-hint {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        .wing-right {
+            right: -10px;
+            transform: scaleX(-1) rotate(15deg);
         }
 
-        .file-info {
-            display: none;
-            background-color: #f1f5f9;
-            padding: 15px 20px;
+        .owl-belly {
+            width: 45px;
+            height: 55px;
+            background: #a8763e;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.9;
+        }
+
+        /* Floating Labels */
+        .floating-label {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 5px 12px;
             border-radius: 12px;
-            margin-bottom: 25px;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #e2e8f0;
-        }
-
-        .file-name {
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .file-size {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
+            font-size: 0.8rem;
             font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background-color: white;
-            border: 2px solid #e2e8f0;
-            color: var(--text-secondary);
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--text-secondary);
-            color: var(--text);
-            background-color: #f8fafc;
-        }
-
-        .result-card {
-            display: none;
-            background-color: #ecfdf5;
-            /* Emerald 50 */
-            border: 1px solid #a7f3d0;
-            border-radius: 16px;
-            padding: 25px;
-            margin-top: 25px;
-            text-align: center;
-        }
-
-        .success-icon {
-            color: var(--success);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .blob-id-container {
-            background-color: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
             color: var(--primary);
-            word-break: break-all;
-            border: 1px solid #e2e8f0;
-            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+            white-space: nowrap;
+            animation: floatLabel 3s ease-in-out infinite;
+            z-index: 20;
         }
 
-        .review-content {
-            padding: 60px 40px;
-            text-align: center;
-        }
-
-        .review-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            display: block;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes float {
+        @keyframes floatLabel {
 
             0%,
             100% {
@@ -792,77 +649,529 @@
             }
 
             50% {
-                transform: translateY(-10px);
-            }
-        }
+                .label-scroll {
+                    bottom: 350px;
+                    left: 30%;
+                    transform: translateX(-50%);
+                }
 
-        @keyframes bounce {
+                /* Above Scroll */
+                .label-glass {
+                    bottom: 350px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
 
-            0%,
-            100% {
-                transform: translateY(0);
-            }
+                /* Above Glass */
+                .label-owl {
+                    bottom: 310px;
+                    left: 68%;
+                    transform: translateX(-50%);
+                }
 
-            50% {
-                transform: translateY(-10px);
-            }
-        }
+                /* Above Owl */
+                .label-lamp {
+                    bottom: 310px;
+                    right: 15%;
+                    transform: translateX(50%);
+                }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
+                /* Above Lamp */
 
-            to {
-                opacity: 1;
-            }
-        }
+                /* CSS Lamp (Night Mode Toggle) */
+                .lamp-container {
+                    position: absolute;
+                    bottom: 190px;
+                    right: 15%;
+                    width: 60px;
+                    height: 100px;
+                    z-index: 15;
+                    cursor: pointer;
+                    transition: var(--transition);
+                }
 
-        @keyframes slideUp {
-            from {
-                transform: translateY(40px);
-                opacity: 0;
-            }
+                .lamp-container:hover {
+                    transform: scale(1.05);
+                }
 
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+                .lamp-base {
+                    width: 40px;
+                    height: 10px;
+                    background: #1e293b;
+                    border-radius: 50%;
+                    position: absolute;
+                    bottom: 0;
+                    left: 10px;
+                }
 
-        /* Mobile */
-        @media (max-width: 480px) {
-            .desk-container {
-                width: 100%;
-            }
+                .lamp-stand {
+                    width: 6px;
+                    height: 50px;
+                    background: #334155;
+                    position: absolute;
+                    bottom: 10px;
+                    left: 27px;
+                }
 
-            .window {
-                width: 120px;
-                height: 160px;
-                left: 50%;
-                transform: translateX(-50%);
-                top: 5%;
-            }
+                .lamp-shade {
+                    width: 60px;
+                    height: 40px;
+                    background: #ef4444;
+                    /* Red shade */
+                    border-radius: 30px 30px 5px 5px;
+                    position: absolute;
+                    top: 10px;
+                    left: 0;
+                    z-index: 2;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                }
 
-            .blackboard {
-                width: 90%;
-                top: 35%;
-            }
+                .lamp-light-effect {
+                    position: absolute;
+                    top: 50px;
+                    left: -20px;
+                    width: 100px;
+                    height: 100px;
+                    background: radial-gradient(circle, rgba(255, 255, 0, 0.3) 0%, transparent 70%);
+                    opacity: 0;
+                    pointer-events: none;
+                    transition: opacity 0.5s;
+                }
 
-            .scroll-container {
-                left: 10%;
-                bottom: 180px;
-            }
+                /* Night Mode Styles */
+                body.night-mode {
+                    --bg-light: #0f172a;
+                    /* Dark Slate */
+                    --surface: #1e293b;
+                    --text: #f1f5f9;
+                    --text-secondary: #94a3b8;
+                    --primary: #38bdf8;
+                    /* Lighter blue for dark mode */
+                }
 
-            .notebook-container {
-                right: 10%;
-                bottom: 160px;
-            }
+                body.night-mode .wall {
+                    background-color: #1e293b;
+                }
 
-            .actions {
-                grid-template-columns: 1fr;
-            }
-        }
+                body.night-mode .floor {
+                    background-color: #334155;
+                }
+
+                body.night-mode .window {
+                    background: linear-gradient(to bottom, #020617, #1e293b);
+                    /* Night Sky */
+                }
+
+                body.night-mode .sun {
+                    background: #fefce8;
+                    box-shadow: 0 0 20px #fefce8;
+                    top: 20px;
+                    left: 20px;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    /* Moon shape */
+                    background: transparent;
+                    box-shadow: -10px 5px 0 0 #fefce8;
+                }
+
+                body.night-mode .cloud {
+                    opacity: 0.2;
+                    background: #475569;
+                }
+
+                body.night-mode .lamp-shade {
+                    background: #facc15;
+                    /* Yellow shade when on */
+                    box-shadow: 0 0 30px #facc15;
+                }
+
+                body.night-mode .lamp-light-effect {
+                    opacity: 1;
+                }
+
+                body.night-mode .desk-top {
+                    background: #451a03;
+                    /* Darker wood */
+                }
+
+                /* User Badge */
+                .user-badge {
+                    position: absolute;
+                    top: 20px;
+                    left: 20px;
+                    background-color: rgba(255, 255, 255, 0.9);
+                    padding: 10px 20px;
+                    border-radius: 30px;
+                    box-shadow: var(--shadow-soft);
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    z-index: 20;
+                }
+
+                .user-avatar {
+                    width: 36px;
+                    height: 36px;
+                    background-color: var(--primary);
+                    color: white;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-weight: bold;
+                    font-size: 1.1rem;
+                }
+
+                /* Top Bar */
+                .top-bar {
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    display: flex;
+                    gap: 15px;
+                    z-index: 20;
+                }
+
+                .network-badge {
+                    background-color: rgba(255, 255, 255, 0.9);
+                    color: var(--primary);
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    box-shadow: var(--shadow-soft);
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .network-dot {
+                    width: 8px;
+                    height: 8px;
+                    background-color: var(--success);
+                    border-radius: 50%;
+                    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+                }
+
+                .btn-wallet {
+                    background-color: white;
+                    border: 2px solid var(--primary);
+                    color: var(--primary);
+                    padding: 8px 20px;
+                    border-radius: 20px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    transition: var(--transition);
+                    box-shadow: var(--shadow-soft);
+                }
+
+                .btn-wallet:hover {
+                    background-color: var(--bg-light);
+                    transform: translateY(-1px);
+                }
+
+                .btn-wallet.connected {
+                    background-color: var(--primary);
+                    color: white;
+                }
+
+                /* --- Modals (Light Theme) --- */
+                .modal-overlay {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(51, 65, 85, 0.6);
+                    /* Slate overlay */
+                    z-index: 1000;
+                    justify-content: center;
+                    align-items: center;
+                    backdrop-filter: blur(4px);
+                    animation: fadeIn 0.3s ease;
+                }
+
+                .modal-overlay.active {
+                    display: flex;
+                }
+
+                .modal-content {
+                    background-color: var(--surface);
+                    border-radius: 24px;
+                    width: 90%;
+                    max-width: 550px;
+                    position: relative;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    overflow: hidden;
+                }
+
+                .close-modal {
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    background: #f1f5f9;
+                    border: none;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    color: var(--text-secondary);
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                    z-index: 10;
+                    transition: var(--transition);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .close-modal:hover {
+                    background-color: #e2e8f0;
+                    color: var(--error);
+                }
+
+                .uploader-container {
+                    padding: 40px;
+                }
+
+                .upload-area {
+                    border: 3px dashed #cbd5e1;
+                    border-radius: 20px;
+                    padding: 40px 20px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: var(--transition);
+                    margin-bottom: 25px;
+                    background-color: #f8fafc;
+                }
+
+                .upload-area:hover {
+                    border-color: var(--primary);
+                    background-color: #f0f9ff;
+                    transform: scale(1.01);
+                }
+
+                .upload-icon {
+                    font-size: 3rem;
+                    margin-bottom: 15px;
+                    display: block;
+                }
+
+                .upload-text {
+                    color: var(--text);
+                    font-weight: 600;
+                    font-size: 1.1rem;
+                    margin-bottom: 5px;
+                }
+
+                .upload-hint {
+                    color: var(--text-secondary);
+                    font-size: 0.9rem;
+                }
+
+                .file-info {
+                    display: none;
+                    background-color: #f1f5f9;
+                    padding: 15px 20px;
+                    border-radius: 12px;
+                    margin-bottom: 25px;
+                    align-items: center;
+                    justify-content: space-between;
+                    border: 1px solid #e2e8f0;
+                }
+
+                .file-name {
+                    font-weight: 600;
+                    color: var(--text);
+                }
+
+                .file-size {
+                    font-size: 0.85rem;
+                    color: var(--text-secondary);
+                }
+
+                .actions {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 15px;
+                    margin-bottom: 20px;
+                }
+
+                .btn-primary {
+                    background-color: var(--primary);
+                    color: white;
+                    padding: 14px;
+                    border: none;
+                    border-radius: 12px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: var(--transition);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    width: 100%;
+                }
+
+                .btn-primary:hover {
+                    background-color: var(--primary-hover);
+                    transform: translateY(-2px);
+                }
+
+                .btn-primary:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+
+                .btn-secondary {
+                    background-color: white;
+                    border: 2px solid #e2e8f0;
+                    color: var(--text-secondary);
+                    padding: 14px;
+                    border-radius: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: var(--transition);
+                    width: 100%;
+                }
+
+                .btn-secondary:hover {
+                    border-color: var(--text-secondary);
+                    color: var(--text);
+                    background-color: #f8fafc;
+                }
+
+                .result-card {
+                    display: none;
+                    background-color: #ecfdf5;
+                    /* Emerald 50 */
+                    border: 1px solid #a7f3d0;
+                    border-radius: 16px;
+                    padding: 25px;
+                    margin-top: 25px;
+                    text-align: center;
+                }
+
+                .success-icon {
+                    color: var(--success);
+                    font-size: 2.5rem;
+                    margin-bottom: 10px;
+                    display: block;
+                }
+
+                .blob-id-container {
+                    background-color: white;
+                    padding: 12px;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                    font-family: 'Courier New', monospace;
+                    color: var(--primary);
+                    word-break: break-all;
+                    border: 1px solid #e2e8f0;
+                    font-size: 0.9rem;
+                }
+
+                .review-content {
+                    padding: 60px 40px;
+                    text-align: center;
+                }
+
+                .review-icon {
+                    font-size: 5rem;
+                    margin-bottom: 20px;
+                    display: block;
+                    animation: bounce 2s infinite;
+                }
+
+                #fileInput {
+                    display: none;
+                }
+
+                @keyframes float {
+
+                    0%,
+                    100% {
+                        transform: translateY(0);
+                    }
+
+                    50% {
+                        transform: translateY(-10px);
+                    }
+                }
+
+                @keyframes bounce {
+
+                    0%,
+                    100% {
+                        transform: translateY(0);
+                    }
+
+                    50% {
+                        transform: translateY(-10px);
+                    }
+                }
+
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                    }
+
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes slideUp {
+                    from {
+                        transform: translateY(40px);
+                        opacity: 0;
+                    }
+
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+
+                /* Mobile */
+                @media (max-width: 480px) {
+                    .desk-container {
+                        width: 100%;
+                    }
+
+                    .window {
+                        width: 120px;
+                        height: 160px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        top: 5%;
+                    }
+
+                    .blackboard {
+                        width: 90%;
+                        top: 35%;
+                    }
+
+                    .scroll-container {
+                        left: 10%;
+                        bottom: 180px;
+                    }
+
+                    .notebook-container {
+                        right: 10%;
+                        bottom: 160px;
+                    }
+
+                    .actions {
+                        grid-template-columns: 1fr;
+                    }
+                }
     </style>
 </head>
 
@@ -872,25 +1181,25 @@
     <div id="loginView" class="view active">
         <div class="login-card">
             <div class="login-icon">🎓</div>
-            <div class="login-title">Repositorio Máximo de Proyectos que Enorgullecen</div>
-            <div class="login-subtitle">Sistema de Evidencias Walrus</div>
+            <div class="login-title">Ultimate Repository of Projects that Make Us Proud</div>
+            <div class="login-subtitle">Walrus Evidence System</div>
 
             <div class="form-group">
-                <label for="generationSelect">Generación Escolar</label>
+                <label for="generationSelect">School Generation</label>
                 <select id="generationSelect">
-                    <option value="" disabled selected>Selecciona tu año...</option>
-                    <option value="2025">Generación 2025</option>
-                    <option value="2024">Generación 2024</option>
-                    <option value="2023">Generación 2023</option>
+                    <option value="" disabled selected>Select your year...</option>
+                    <option value="2025">Class of 2025</option>
+                    <option value="2024">Class of 2024</option>
+                    <option value="2023">Class of 2023</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="aliasInput">Alias de Alumno</label>
-                <input type="text" id="aliasInput" placeholder="Ej. CryptoStudent_01">
+                <label for="aliasInput">Student Alias</label>
+                <input type="text" id="aliasInput" placeholder="Ex. CryptoStudent_01">
             </div>
 
-            <button id="btnLogin" class="btn-login">Entrar al Salón</button>
+            <button id="btnLogin" class="btn-login">Enter Classroom</button>
         </div>
     </div>
 
@@ -904,7 +1213,7 @@
         </div>
         <div class="blackboard">
             <div class="chalk-text">
-                "El conocimiento es poder.<br>Guárdalo para siempre."
+                "Knowledge is power.<br>Keep it forever."
             </div>
         </div>
         <div class="floor"></div>
@@ -921,7 +1230,7 @@
             <div class="user-avatar" id="userAvatar">A</div>
             <div>
                 <div style="font-weight: 700; color: var(--text);" id="displayAlias">Alias</div>
-                <div style="font-size: 0.85rem; color: var(--text-secondary);" id="displayGen">Gen 2025</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary);" id="displayGen">Class of 2025</div>
             </div>
         </div>
 
@@ -933,14 +1242,14 @@
             </div>
             <button id="btnWallet" class="btn-wallet">
                 <span>🔌</span>
-                <span id="walletText">Conectar Billetera</span>
+                <span id="walletText">Connect Wallet</span>
             </button>
         </div>
 
         <!-- Interactive Items (CSS Art) -->
 
         <!-- CSS Scroll (Upload) -->
-        <div id="scrollItem" class="interactive-item scroll-container" title="Subir Mejores Trabajos">
+        <div id="scrollItem" class="interactive-item scroll-container" title="Upload Best Works">
             <div class="scroll-roll"></div>
             <div class="scroll-paper">
                 <div class="scroll-text-icon">📜</div>
@@ -950,19 +1259,53 @@
 
         <!-- CSS Magnifying Glass (Explorer) -->
         <a href="https://walruscan.com/testnet/blobs" target="_blank"
-            class="interactive-item magnifying-glass-container" title="Explorar Blobs en WalrusScan">
+            class="interactive-item magnifying-glass-container" title="Explore Blobs on WalrusScan">
             <div class="glass-lens">
                 <div class="glass-reflection"></div>
             </div>
             <div class="glass-handle"></div>
         </a>
 
+        <!-- CSS Owl (Info) -->
+        <div id="owlItem" class="interactive-item owl-container" title="About Free Knowledge">
+            <div class="owl-head">
+                <div class="owl-ear ear-left"></div>
+                <div class="owl-ear ear-right"></div>
+                <div class="owl-eye eye-left">
+                    <div class="owl-pupil"></div>
+                </div>
+                <div class="owl-eye eye-right">
+                    <div class="owl-pupil"></div>
+                </div>
+                <div class="owl-beak"></div>
+            </div>
+            <div class="owl-body">
+                <div class="owl-wing wing-left"></div>
+                <div class="owl-wing wing-right"></div>
+                <div class="owl-belly"></div>
+            </div>
+        </div>
+
+        <!-- Floating Labels -->
+        <div class="floating-label label-scroll">Upload Files</div>
+        <div class="floating-label label-glass">Check Network</div>
+        <div class="floating-label label-owl">Our Purpose</div>
+        <div class="floating-label label-lamp">Night Mode</div>
+
         <!-- CSS Notebook (Review) -->
-        <div id="notebookItem" class="interactive-item notebook-container" title="Ir a Revisar Documentos">
+        <div id="notebookItem" class="interactive-item notebook-container" title="Review Documents">
             <div class="notebook-spine"></div>
             <div class="notebook-cover">
-                <div class="notebook-label">NOTAS</div>
+                <div class="notebook-label">NOTES</div>
             </div>
+        </div>
+
+        <!-- CSS Lamp (Night Mode) -->
+        <div id="lampItem" class="interactive-item lamp-container" title="Toggle Night Mode">
+            <div class="lamp-shade"></div>
+            <div class="lamp-stand"></div>
+            <div class="lamp-base"></div>
+            <div class="lamp-light-effect"></div>
         </div>
 
     </div>
@@ -973,23 +1316,23 @@
             <button class="close-modal" onclick="closeModal('uploaderModal')">×</button>
             <div class="uploader-container">
                 <header style="text-align: center; margin-bottom: 30px;">
-                    <h2 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 5px;">Subir Evidencia</h2>
-                    <div style="color: var(--text-secondary);">Sube tus mejores trabajos a la red Walrus</div>
+                    <h2 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 5px;">Upload Evidence</h2>
+                    <div style="color: var(--text-secondary);">Upload your best work to the Walrus network</div>
                 </header>
 
                 <div class="upload-area" id="dropZone">
                     <div class="upload-icon">📄</div>
-                    <div class="upload-text">Arrastra tu archivo aquí</div>
-                    <div class="upload-hint">o haz clic para seleccionar (Máx 10MB)</div>
+                    <div class="upload-text">Drag your file here</div>
+                    <div class="upload-hint">or click to select (Max 10MB)</div>
                     <input type="file" id="fileInput">
                 </div>
 
                 <div class="file-info" id="fileInfo">
                     <div class="file-details">
-                        <span class="file-name" id="fileName">archivo.txt</span>
+                        <span class="file-name" id="fileName">file.txt</span>
                         <span class="file-size" id="fileSize">0 KB</span>
                     </div>
-                    <div style="color: var(--success); font-weight: bold;">Listo</div>
+                    <div style="color: var(--success); font-weight: bold;">Ready</div>
                 </div>
 
                 <div class="error-msg" id="errorMsg"
@@ -998,25 +1341,26 @@
                 <div class="actions">
                     <button id="btnSimulate" class="btn-primary" disabled>
                         <span class="spinner" id="spinner"></span>
-                        <span id="btnText">Subir Archivo</span>
+                        <span id="btnText">Upload File</span>
                     </button>
-                    <button id="btnClear" class="btn-secondary">Limpiar</button>
+                    <button id="btnClear" class="btn-secondary">Clear</button>
                 </div>
 
                 <div style="text-align: center; margin-top: 10px;">
                     <button id="btnCopy" class="btn-secondary" disabled
-                        style="width: auto; display: inline-block; padding: 8px 16px; font-size: 0.9rem;">Copiar
+                        style="width: auto; display: inline-block; padding: 8px 16px; font-size: 0.9rem;">Copy
                         ID</button>
                 </div>
 
                 <div class="result-card" id="resultCard">
                     <div class="success-icon">🎉</div>
-                    <h3 style="color: var(--text); margin-bottom: 10px;">¡Subida Exitosa!</h3>
-                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Tu trabajo ha sido preservado.</p>
+                    <h3 style="color: var(--text); margin-bottom: 10px;">Upload Successful!</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Your work has been preserved.</p>
                     <div class="blob-id-container" id="blobIdDisplay">...</div>
                     <p style="font-size: 0.9rem; margin-top: 15px;">
                         <a href="#" target="_blank"
-                            style="color: var(--primary); text-decoration: none; font-weight: 600;">Ver en SuiScan ↗</a>
+                            style="color: var(--primary); text-decoration: none; font-weight: 600;">View on SuiScan
+                            ↗</a>
                     </p>
                 </div>
             </div>
@@ -1029,17 +1373,47 @@
             <button class="close-modal" onclick="closeModal('reviewModal')">×</button>
             <div class="review-content">
                 <div class="review-icon">📚</div>
-                <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 1.8rem;">Revisión de Documentos</h2>
+                <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 1.8rem;">Document Review</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 35px; line-height: 1.6;">
-                    Accede al explorador oficial para ver todas las evidencias y trabajos registrados en la red Walrus
-                    Testnet.
+                    Access the official explorer to view all evidence and works registered on the Walrus Testnet.
                 </p>
                 <a href="https://suiscan.xyz/testnet/home" target="_blank" class="btn-primary"
                     style="text-decoration: none; display: inline-flex; width: auto; padding: 16px 32px;">
-                    Ir a SuiScan ↗
+                    Go to SuiScan ↗
                 </a>
             </div>
         </div>
+    </div>
+    </div>
+
+    <!-- Info Modal (Owl) -->
+    <div id="infoModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('infoModal')">×</button>
+            <div class="review-content">
+                <div class="review-icon">🦉</div>
+                <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 1.8rem;">Free Knowledge Library</h2>
+                <div style="color: var(--text); text-align: left; margin-bottom: 25px; line-height: 1.6;">
+                    <p style="margin-bottom: 15px;">
+                        <strong>Mission:</strong> To provide a decentralized, immutable, and accessible repository for
+                        student projects and educational resources using the Walrus Network.
+                    </p>
+                    <p style="margin-bottom: 15px;">
+                        <strong>Uses in Schools:</strong>
+                    </p>
+                    <ul style="padding-left: 20px; color: var(--text-secondary);">
+                        <li>Preserving "Best Works" forever.</li>
+                        <li>Sharing open educational resources (OER).</li>
+                        <li>Creating a verifiable portfolio for students.</li>
+                        <li>Fostering a culture of open knowledge.</li>
+                    </ul>
+                </div>
+                <button onclick="closeModal('infoModal')" class="btn-primary" style="width: auto; padding: 12px 30px;">
+                    Understood
+                </button>
+            </div>
+        </div>
+    </div>
     </div>
 
     <script>
@@ -1048,6 +1422,7 @@
         const classroomView = document.getElementById('classroomView');
         const uploaderModal = document.getElementById('uploaderModal');
         const reviewModal = document.getElementById('reviewModal');
+        const infoModal = document.getElementById('infoModal');
 
         // Login Logic
         const btnLogin = document.getElementById('btnLogin');
@@ -1062,13 +1437,13 @@
             const alias = aliasInput.value.trim();
 
             if (!gen || !alias) {
-                alert('Por favor selecciona una generación e ingresa tu alias.');
+                alert('Please select a generation and enter your alias.');
                 return;
             }
 
             // Set User Info
             displayAlias.textContent = alias;
-            displayGen.textContent = `Gen ${gen}`;
+            displayGen.textContent = `Class of ${gen}`;
             userAvatar.textContent = alias.charAt(0).toUpperCase();
 
             // Transition
@@ -1086,6 +1461,10 @@
             reviewModal.classList.add('active');
         });
 
+        document.getElementById('owlItem').addEventListener('click', () => {
+            infoModal.classList.add('active');
+        });
+
         window.closeModal = function (modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
@@ -1097,6 +1476,103 @@
             }
         }
 
+        // --- Audio System (Web Audio API) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'hover') {
+                // Soft tick
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'click') {
+                // High pitch beep
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, now);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'switch') {
+                // Mechanical click (Lamp)
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(200, now);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'owl') {
+                // Hoot Hoot
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.linearRampToValueAtTime(400, now + 0.2);
+
+                gainNode.gain.setValueAtTime(0, now);
+                gainNode.gain.linearRampToValueAtTime(0.2, now + 0.1);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+
+                osc.start(now);
+                osc.stop(now + 0.3);
+
+                // Second hoot
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(600, now + 0.4);
+                osc2.frequency.linearRampToValueAtTime(400, now + 0.6);
+
+                gain2.gain.setValueAtTime(0, now + 0.4);
+                gain2.gain.linearRampToValueAtTime(0.2, now + 0.5);
+                gain2.gain.linearRampToValueAtTime(0, now + 0.8);
+
+                osc2.start(now + 0.4);
+                osc2.stop(now + 0.8);
+            }
+        }
+
+        // Add hover sounds to interactive items
+        document.querySelectorAll('.interactive-item, button').forEach(item => {
+            item.addEventListener('mouseenter', () => playSound('hover'));
+            item.addEventListener('click', () => {
+                if (!item.id.includes('lamp') && !item.id.includes('owl')) playSound('click');
+            });
+        });
+
+        // --- Night Mode Logic ---
+        const lampItem = document.getElementById('lampItem');
+        let isNightMode = false;
+
+        lampItem.addEventListener('click', () => {
+            isNightMode = !isNightMode;
+            document.body.classList.toggle('night-mode', isNightMode);
+            playSound('switch');
+        });
+
+        // Owl Sound
+        document.getElementById('owlItem').addEventListener('click', () => {
+            playSound('owl');
+            // Modal opens via existing listener
+        });
+
         // --- Wallet Logic (Existing) ---
         const btnWallet = document.getElementById('btnWallet');
         const walletText = document.getElementById('walletText');
@@ -1106,7 +1582,7 @@
 
         async function connectWallet() {
             if (walletAddress) {
-                alert(`Conectado a: ${walletAddress}`);
+                alert(`Connected to: ${walletAddress}`);
                 return;
             }
             const hasSuiWallet = window.suiWallet || window.stashedWallet;
@@ -1119,10 +1595,10 @@
                     }
                 } catch (e) {
                     console.error("Connection failed", e);
-                    alert("No se pudo conectar la billetera.");
+                    alert("Could not connect wallet.");
                 }
             } else {
-                const confirmSim = confirm("No se detectó billetera. ¿Simular conexión?");
+                const confirmSim = confirm("No wallet detected. Simulate connection?");
                 if (confirmSim) setWalletConnected("0x7e8...a1b2");
             }
         }
@@ -1171,7 +1647,7 @@
         function handleFile(file) {
             resetForm(false);
             if (file.size > MAX_SIZE_BYTES) {
-                showError(`Excede ${MAX_SIZE_MB}MB.`);
+                showError(`Exceeds ${MAX_SIZE_MB}MB.`);
                 return;
             }
             currentFile = file;
@@ -1208,7 +1684,7 @@
             btnCopy.disabled = true;
             hideError();
             spinner.style.display = 'none';
-            btnText.textContent = 'Subir Archivo';
+            btnText.textContent = 'Upload File';
         }
 
         async function uploadFile() {
@@ -1224,7 +1700,7 @@
                 let blobId;
                 if (data.newlyCreated) blobId = data.newlyCreated.blobObject.blobId;
                 else if (data.alreadyCertified) blobId = data.alreadyCertified.blobId;
-                else throw new Error('Respuesta inesperada');
+                else throw new Error('Unexpected response');
 
                 blobIdDisplay.textContent = blobId;
                 resultCard.style.display = 'block';
@@ -1245,11 +1721,11 @@
         function setLoading(isLoading) {
             if (isLoading) {
                 spinner.style.display = 'inline-block';
-                btnText.textContent = 'Subiendo...';
+                btnText.textContent = 'Uploading...';
                 btnSimulate.disabled = true;
             } else {
                 spinner.style.display = 'none';
-                btnText.textContent = 'Subir Archivo';
+                btnText.textContent = 'Upload File';
                 btnSimulate.disabled = true;
             }
         }
@@ -1257,7 +1733,7 @@
         function copyToClipboard() {
             navigator.clipboard.writeText(blobIdDisplay.textContent).then(() => {
                 const original = btnCopy.textContent;
-                btnCopy.textContent = '¡Copiado!';
+                btnCopy.textContent = 'Copied!';
                 setTimeout(() => btnCopy.textContent = original, 2000);
             });
         }
